@@ -1,0 +1,47 @@
+
+.container {
+    text-align: center;
+    margin: auto;
+    padding: 1rem;
+    max-width: 400px;
+    border: 0.5px solid rgb(176, 176, 150);
+    background-color: beige;
+    border-radius: 7.5px;
+    box-shadow: 10px 5px 5px rgb(187, 187, 169);
+  }
+  
+  
+  .task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    background-color: beige;
+    border-radius: 4px;
+    padding: 0.5rem;;
+  }
+  
+  .delete-button {
+    background-image: url(../img/favicon.ico);
+    cursor: pointer;
+  }
+  
+
+  .input-text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    padding-right: 175px;
+    border: 1px solid #ddd;
+    background-color: beige;
+   
+  }
+
+  
