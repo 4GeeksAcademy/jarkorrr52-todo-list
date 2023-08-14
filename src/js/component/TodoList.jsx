@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TodoItem from './TodoItem';
 import '../../styles/TodoList.css';
 
@@ -6,60 +6,17 @@ const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  useEffect(() => {
-    fetch('https://playground.4geeks.com/apis/fake/todos/user/alesanchezr')
-      .then((response) => response.json())
-      .then((data) => {
-        setTasks(data);
-      })
-      .catch((error) => {
-        console.error('Error al cargar la lista de tareas:', error);
-      });
-  }, []);
-
-  const handleAddTask = async () => {
+  const handleAddTask = () => {
     if (newTask.trim() !== '') {
       const newTasks = [...tasks, newTask];
       setTasks(newTasks);
       setNewTask('');
-
-      try {
-        const response = await fetch('https://playground.4geeks.com/apis/fake/todos/user/alesanchezr', {
-          method: 'PUT',
-          body: JSON.stringify(newTasks),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          console.error('Error al actualizar la lista en el servidor');
-        }
-      } catch (error) {
-        console.error('Error de conexión:', error);
-      }
     }
   };
 
-  const handleDeleteTask = async (index) => {
+  const handleDeleteTask = (index) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
-
-    try {
-      const response = await fetch('https://playground.4geeks.com/apis/fake/todos/user/alesanchezr', {
-        method: 'PUT',
-        body: JSON.stringify(updatedTasks),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        console.error('Error al actualizar la lista en el servidor');
-      }
-    } catch (error) {
-      console.error('Error de conexión:', error);
-    }
   };
 
   return (
@@ -93,4 +50,5 @@ const TodoList = () => {
 };
 
 export default TodoList;
+
 
