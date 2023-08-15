@@ -1,22 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TodoItem from './TodoItem';
 import '../../styles/TodoList.css';
+
+const url = "https://playground.4geeks.com/apis/fake/todos/user/jarkor52";
 
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = () => {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setTasks(data))
+      .catch(error => console.error('Error fetching tasks:', error));
+  };
+
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
-      const newTasks = [...tasks, newTask];
-      setTasks(newTasks);
-      setNewTask('');
+      const newTaskData = { label: newTask, done: false };
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(newTaskData),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        setTasks(prevTasks => [...prevTasks, data]); 
+        setNewTask('');
+      })
+      .catch(error => console.error('Error adding task:', error));
     }
   };
 
-  const handleDeleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
+  const handleDeleteTask = (taskId) => {
+    fetch(`${url}`, {
+      method: 'DELETE',
+      })
+      .then(() => {
+        const updatedTasks = tasks.filter(task => task.id !== taskId);
+        setTasks(updatedTasks);
+      })
+      .catch(error => console.error('Error deleting task:', error));
   };
 
   return (
@@ -40,8 +70,12 @@ const TodoList = () => {
         {tasks.length === 0 ? (
           <p>No hay tareas, añadir tareas</p>
         ) : (
-          tasks.map((task, index) => (
-            <TodoItem key={index} task={task} onDelete={() => handleDeleteTask(index)} />
+          tasks.map((task) => (
+            <TodoItem
+              key={task.id}
+              task={task.label}
+              onDelete={() => handleDeleteTask(task.id)}
+            />
           ))
         )}
       </ul>
@@ -50,5 +84,3 @@ const TodoList = () => {
 };
 
 export default TodoList;
-
-
